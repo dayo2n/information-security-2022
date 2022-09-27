@@ -3,3 +3,20 @@
 
 - 학번 : 201902688
 - 이름 : 문다연
+
+
+## Details
+<details>
+<summary>  1주차 과제를 위한 Github 설정 </summary>
+README.md
+</details>
+
+<details>
+<summary>  2주차 ENIGMA </summary>
+Enigma-Project/enigma.py
+</details>
+
+<details>
+<summary>  3주차 Simplified DES </summary>
+Simplified-DES/sdes.py
+</details>

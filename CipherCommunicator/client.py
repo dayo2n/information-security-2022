@@ -1,3 +1,7 @@
+# ciphercommunicator client
+# complete this program with your own AES-128-EBC implemetation.
+# hint: Receiver.decrypt, encrypt_message
+
 from socket import AddressFamily, SocketKind, socket
 from threading import Thread
 

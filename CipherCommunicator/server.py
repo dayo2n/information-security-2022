@@ -1,3 +1,6 @@
+# simple ciphercommunicator relay server
+# this code shall not be modified, please edit client.py!!!
+
 from random import random
 from socket import AddressFamily, AddressInfo, SocketKind, socket
 from threading import Thread

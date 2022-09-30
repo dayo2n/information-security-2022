@@ -29,7 +29,7 @@ class Receiver(Thread):
     def handle_recv(self, received:bytes):
         try:
             decrypt_result = self.decrypt(received)
-            print("\nReceived: " + bytes.decode(decrypt_result, "UTF-8"))
+            print("Received: " + bytes.decode(decrypt_result, "UTF-8") + "\nMessage:", end = ' ')
         except:
             pass
 

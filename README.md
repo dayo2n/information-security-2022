@@ -20,3 +20,13 @@ Enigma-Project/enigma.py
 <summary>  3주차 Simplified DES </summary>
 Simplified-DES/sdes.py
 </details>
+
+<details>
+<summary>  4주차 Cipher Communicator </summary>
+CipherCommunicator/client.py
+</details>
+
+<details>
+<summary>  5주차 S-DES-MODE: ECB, CBC모드 </summary>
+S-DES-MOD/sdes_opmode.py
+</details>

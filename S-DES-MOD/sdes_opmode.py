@@ -4,8 +4,9 @@
 # This code requires "bitarray" package.
 # Install with: pip install bitarray
 
+import random
+import re
 from ctypes import ArgumentError
-import re, random
 from bitarray import bitarray, util as ba_util
 
 # Initial Permutation (IP)
@@ -146,23 +147,65 @@ def sdes(text: bitarray, key: bitarray, mode) -> bitarray:
 
     return result
 
+### 8비트씩 암호화 / 복호화
+BLOCK_SIZE = 8
 
 def sdes_encrypt_ecb(text: bitarray, key: bitarray):
-    pass
+    result = bitarray()
+
+    for index in range(0, len(text) // BLOCK_SIZE):
+        result += (sdes(text[index * BLOCK_SIZE : index * BLOCK_SIZE + BLOCK_SIZE], key, MODE_ENCRYPT))
+
+    return result
 
 def sdes_decrypt_ecb(ciphertext: bitarray, key: bitarray):
-    pass
+    result = bitarray()
+
+    for index in range(0, len(ciphertext) // BLOCK_SIZE):
+        result += (sdes(ciphertext[index * BLOCK_SIZE: index * BLOCK_SIZE + BLOCK_SIZE], key, MODE_DECRYPT))
+
+    return result
 
 def sdes_encrypt_cbc(text: bitarray, key: bitarray, iv:bitarray):
-    pass
+    result = bitarray()
+    prev_result = bitarray()
+
+    for index in range(0, len(text) // BLOCK_SIZE):
+        if index == 0:
+            xor_text = text[index * BLOCK_SIZE : index * BLOCK_SIZE + BLOCK_SIZE] ^ iv
+            result += (sdes(xor_text, key, MODE_ENCRYPT))
+            prev_result = result
+        else:
+            xor_text = text[index * BLOCK_SIZE: index * BLOCK_SIZE + BLOCK_SIZE] ^ prev_result
+            prev_result = (sdes(xor_text, key, MODE_ENCRYPT))
+            result += prev_result
+
+    return result
 
 def sdes_decrypt_cbc(ciphertext: bitarray, key: bitarray, iv:bitarray):
-    pass
+    result = bitarray()
+    prev_result = bitarray()
+
+    for index in range(0, len(ciphertext) // BLOCK_SIZE):
+        current_target_ciphertext = ciphertext[index * BLOCK_SIZE: index * BLOCK_SIZE + BLOCK_SIZE]
+        decrypted_ciphertext = sdes(current_target_ciphertext, key, MODE_DECRYPT)
+
+        if index == 0:
+            prev_result = current_target_ciphertext
+            result += decrypted_ciphertext ^ iv
+
+        else:
+            result += decrypted_ciphertext ^ prev_result
+            prev_result = current_target_ciphertext
+
+    return result
 
 #### DES Sample Program Start
 
-plaintext = input("[*] Input Plaintext in Binary: ")
-key = input("[*] Input Key in Binary (10bits): ")
+# plaintext = input("[*] Input Plaintext in Binary: ")
+plaintext = "0110110110001111"
+# key = input("[*] Input Key in Binary (10bits): ")
+key = "1010000010"
 
 print(len(plaintext))
 
@@ -192,7 +235,7 @@ if result_decrypt != bits_plaintext:
 else:
     print(f"S-DES-ECB SUCCESS!!!")
 
-random_iv = bitarray(bin(random.getrandbits(8)).replace('0b', ''))
+random_iv = bitarray(bin(random.getrandbits(8)).replace('0b', '').zfill(BLOCK_SIZE))  # 길이를 8로 맞춰주기 위한 zfill
 print(f"IV will be random...{random_iv}")
 
 result_encrypt = sdes_encrypt_cbc(bits_plaintext, bits_key, random_iv)

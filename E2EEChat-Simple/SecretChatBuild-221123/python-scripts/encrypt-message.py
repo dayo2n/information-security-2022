@@ -13,16 +13,19 @@ def read_from_base64():
     return [ decode_base64(input()), input() ]
 
 def pad_message(msg):
-    padded_msg = msg.encode('utf-8') # 메세지 패딩 구현
+    padded_msg = pad(msg.encode('utf-8', 16))  # 메세지 패딩 구현
     return padded_msg
 
 def encrypt_message(key, iv, msg):
     # AES 256 암호화 구현
+    cipher = AES.new(key, AES.MODE_EBC, iv)
+    return encode_base64(cipher.encrypt(msg))
+
 
 [secretkey, message] = read_from_base64()
 
 message = pad_message(message)
-randomiv = # 16바이트 (128비트 IV 랜덤 생성)
+randomiv = get_random_bytes(16)  # 16바이트 (128비트 IV 랜덤 생성)
 
 randomiv_str = encode_base64(randomiv)
 cipher_str = encrypt_message(secretkey, randomiv, message)
